@@ -1,4 +1,5 @@
 #!/usr/bin/env node --harmony
+const request = require('superagent');
 const co = require('co');
 const prompt = require('co-prompt');
 const program = require('commander');
@@ -11,7 +12,16 @@ program
     co(function*() {
       const username = yield prompt('username: ');
       const password = yield prompt.password('password: ');
-      console.log(`user: ${username} pass: ${password} file: ${file}`);
+      request
+        .post('https://api.bitbucket.org/2.0/snippets/')
+        .auth(username, password)
+        .attach('file', file)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          console.log(res);
+          const link = res.body.links.html.href;
+          console.log('Snippet created: %s', link);
+        });
     });
   })
   .parse(process.argv);
