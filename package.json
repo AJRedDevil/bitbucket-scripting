@@ -1,0 +1,13 @@
+{
+  "name": "bitbucket-scripting",
+  "version": "0.0.1",
+  "description": "A command-line tool for creating Bitbucket snippets.",
+  "main": "index.js",
+  "repository": "git@gitlab.com:AJRedDevil/bitbucket-scripting.git",
+  "author": "Ajan Lal Shrestha <ajan.shresh@gmail.com>",
+  "license": "MIT",
+  "bin": {
+    "snippet": "./index.js"
+  },
+  "dependencies": {}
+}
