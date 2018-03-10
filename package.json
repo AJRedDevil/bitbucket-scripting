@@ -9,5 +9,7 @@
   "bin": {
     "snippet": "./index.js"
   },
-  "dependencies": {}
+  "dependencies": {
+    "commander": "^2.15.0"
+  }
 }
