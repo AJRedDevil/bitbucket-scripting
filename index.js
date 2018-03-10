@@ -1,4 +1,6 @@
 #!/usr/bin/env node --harmony
+const fs = require('fs');
+const ProgressBar = require('progress');
 const chalk = require('chalk');
 const request = require('superagent');
 const co = require('co');
@@ -13,10 +15,23 @@ program
     co(function*() {
       const username = yield prompt('username: ');
       const password = yield prompt.password('password: ');
+      const fileSize = fs.statSync(file).size;
+      const fileStream = fs.createReadStream(file);
+      const barOpts = {
+        width: 20,
+        total: fileSize,
+        clear: true,
+      };
+      const bar = new ProgressBar(' uploading [:bar] :percent :etas', barOpts);
+
+      fileStream.on('data', function(chunk) {
+        bar.tick(chunk.length);
+      });
+
       request
         .post('https://api.bitbucket.org/2.0/snippets/')
         .auth(username, password)
-        .attach('file', file)
+        .attach('file', fileStream)
         .set('Accept', 'application/json')
         .end(function(err, res) {
           if (!err && res.ok) {
