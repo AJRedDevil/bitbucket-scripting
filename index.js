@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony
+const co = require('co');
+const prompt = require('co-prompt');
 const program = require('commander');
 
 program
@@ -6,8 +8,10 @@ program
   .option('-u, --username <username>', 'The user to authenticate as')
   .option('-p, --password <password>', "The user's password")
   .action(function(file) {
-    console.log(
-      `user: ${program.username} pass: ${program.password} file: ${file}`
-    );
+    co(function*() {
+      const username = yield prompt('username: ');
+      const password = yield prompt.password('password: ');
+      console.log(`user: ${username} pass: ${password} file: ${file}`);
+    });
   })
   .parse(process.argv);
